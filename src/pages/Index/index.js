@@ -52,7 +52,7 @@ export default class Index extends React.Component{
     }
     // 发 Ajax 获得轮播图数据
     async getswiper() {
-        let data = await axios.get('http://localhost:8080/home/swiper')
+        let data = await axios.get('http://192.168.1.101:8080/home/swiper')
         // this.setState是异步的 有一点点延时
         this.setState({
             swiper:data.data.body
@@ -64,19 +64,18 @@ export default class Index extends React.Component{
     }
     // 发Ajax 获取租房小组信息
     async getGroups() {
-        let res = await axios.get('http://localhost:8080/home/groups?area=AREA%7C88cff55c-aaa4-e2e0')
+        let res = await axios.get('http://192.168.1.101:8080/home/groups?area=AREA%7C88cff55c-aaa4-e2e0')
         this.setState({
             groups:res.data.body
         })
     }
     // 发Ajax 获得咨询信息
     async getNews() {
-        let res = await axios.get('http://localhost:8080/home/news', {
+        let res = await axios.get('http://192.168.1.101:8080/home/news', {
                   params:{
                       area:'AREA%7C88cff55c-aaa4-e2e0'
                   }
         })
-        console.log(res.data.body)
         this.setState({
             news:res.data.body
         })
@@ -90,7 +89,7 @@ export default class Index extends React.Component{
             style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
             >
             <img
-                src={`http://localhost:8080${val.imgSrc}`}
+                src={`http://192.168.1.101:8080${val.imgSrc}`}
                 alt=""
                 style={{ width: '100%', verticalAlign: 'top' }}
                 onLoad={() => {
@@ -115,7 +114,7 @@ export default class Index extends React.Component{
     renderNews() {
         return this.state.news.map( (val) => {
             return <div className="new-item" key={val.id}>
-            <img src={'http://localhost:8080' + val.imgSrc}/>
+            <img src={'http://192.168.1.101:8080' + val.imgSrc}/>
             <div className="item-right">
                 <h3>{val.title}</h3>
                 <p>
@@ -181,7 +180,7 @@ export default class Index extends React.Component{
                   <h3>{item.title}</h3>
                   <p>{item.desc}</p>
                 </div>
-                <img src={`http://localhost:8080${item.imgSrc}`} alt="" />
+                <img src={`http://192.168.1.101:8080${item.imgSrc}`} alt="" />
               </Flex>
             }}
             />

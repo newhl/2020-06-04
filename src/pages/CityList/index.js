@@ -2,13 +2,14 @@ import React from 'react'
 import { NavBar, Icon } from 'antd-mobile';
 import axios from 'axios'
 import './citylist.scss'
+
 export default class CityList extends React.Component {
     componentDidMount() {
         this.getCitylit()
     }
     // 发Ajax 获取城市列表
     async getCitylit() {
-        let res = await axios.get('http://localhost:8080/area/city', {
+        let res = await axios.get('http://192.168.1.101:8080/area/city', {
             params:{
                 level:1
             }
