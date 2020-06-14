@@ -1,5 +1,7 @@
 import React from 'react';
 import { Carousel, Flex, Grid  } from 'antd-mobile';
+import instance  from '../../utils/api'
+import { baseURL } from '../../utils/baseUrl'
 import axios from 'axios'
 import './index.css'
 import './index.scss'
@@ -42,17 +44,27 @@ export default class Index extends React.Component{
         imgHeight: 176,
         isplay: false,
         groups:[],
-        news:[]
+        news:[],
+        currentCity:''
     }
     // 第一次挂载 componentDidMount 页面打开经常用来发送Ajax
     componentDidMount() {
         this.getswiper()
         this.getGroups()
         this.getNews()
+        let city = JSON.parse(localStorage.getItem('city'))
+        if(!city) {
+            this.CurrentCity()
+        }else{
+            this.setState({
+                currentCity:city.label
+            })
+        }
     }
     // 发 Ajax 获得轮播图数据
     async getswiper() {
-        let data = await axios.get('http://192.168.1.101:8080/home/swiper')
+        // let data = await axios.get('http://192.168.1.101:8080/home/swiper')
+        let data = await instance.get('/home/swiper')
         // this.setState是异步的 有一点点延时
         this.setState({
             swiper:data.data.body
@@ -89,7 +101,7 @@ export default class Index extends React.Component{
             style={{ display: 'inline-block', width: '100%', height: this.state.imgHeight }}
             >
             <img
-                src={`http://192.168.1.101:8080${val.imgSrc}`}
+                src={baseURL + val.imgSrc }
                 alt=""
                 style={{ width: '100%', verticalAlign: 'top' }}
                 onLoad={() => {
@@ -114,7 +126,7 @@ export default class Index extends React.Component{
     renderNews() {
         return this.state.news.map( (val) => {
             return <div className="new-item" key={val.id}>
-            <img src={'http://192.168.1.101:8080' + val.imgSrc}/>
+            <img src={baseURL + val.imgSrc}/>
             <div className="item-right">
                 <h3>{val.title}</h3>
                 <p>
@@ -124,6 +136,16 @@ export default class Index extends React.Component{
             </div>
             </div>
         })
+    }
+    // 获取当前城市
+    CurrentCity() {
+        var myCity = new window.BMap.LocalCity();
+        myCity.get((result) => {
+            let cityName = result.name;
+            this.setState({
+                currentCity:cityName
+            })
+        });
     }
     render() {
         return(
@@ -135,7 +157,7 @@ export default class Index extends React.Component{
                     className='location'
                     onClick={ () => { this.props.history.push('/citylist')}}
                     >
-                    <span>上海</span>
+                    <span>{this.state.currentCity}</span>
                     <i className="iconfont icon-arrow" />
                     </div>
                     <div
@@ -180,7 +202,7 @@ export default class Index extends React.Component{
                   <h3>{item.title}</h3>
                   <p>{item.desc}</p>
                 </div>
-                <img src={`http://192.168.1.101:8080${item.imgSrc}`} alt="" />
+                <img src={baseURL + item.imgSrc} alt="" />
               </Flex>
             }}
             />
